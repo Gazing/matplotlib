@@ -7436,7 +7436,7 @@ class Axes(_AxesBase):
     @_preprocess_data(replace_names=["dataset"], label_namer=None)
     def violinplot(self, dataset, positions=None, vert=True, widths=0.5,
                    showmeans=False, showextrema=True, showmedians=False,
-                   points=100, bw_method=None):
+                   points=100, bw_method=None, percentiles=[]):
         """
         Make a violin plot.
 
@@ -7533,13 +7533,13 @@ class Axes(_AxesBase):
             kde = mlab.GaussianKDE(X, bw_method)
             return kde.evaluate(coords)
 
-        vpstats = cbook.violin_stats(dataset, _kde_method, points=points)
+        vpstats = cbook.violin_stats(dataset, _kde_method, points=points, percentiles=percentiles)
         return self.violin(vpstats, positions=positions, vert=vert,
                            widths=widths, showmeans=showmeans,
-                           showextrema=showextrema, showmedians=showmedians)
+                           showextrema=showextrema, showmedians=showmedians, percentiles=percentiles)
 
     def violin(self, vpstats, positions=None, vert=True, widths=0.5,
-               showmeans=False, showextrema=True, showmedians=False):
+               showmeans=False, showextrema=True, showmedians=False, percentiles=[]):
         """Drawing function for violin plots.
 
         Draw a violin plot for each column of `vpstats`. Each filled area
@@ -7675,6 +7675,7 @@ class Axes(_AxesBase):
 
         # Render violins
         bodies = []
+        percentileList = [[] for p in percentiles]
         for stats, pos, width in zip(vpstats, positions, widths):
             # The 0.5 factor reflects the fact that we plot from v-p to
             # v+p
@@ -7689,7 +7690,10 @@ class Axes(_AxesBase):
             mins.append(stats['min'])
             maxes.append(stats['max'])
             medians.append(stats['median'])
+            for i in range(0, len(percentiles)):
+                percentileList[i].append(stats['percentiles'][i])
         artists['bodies'] = bodies
+
 
         # Render means
         if showmeans:
@@ -7711,6 +7715,11 @@ class Axes(_AxesBase):
                                              pmins,
                                              pmaxes,
                                              colors=edgecolor)
+ 
+        # Render custom percentiles
+        for i in range(0, len(percentileList)):
+            artists['cpercentiles_'+str(i)] = perp_lines(percentileList[i], pmins, pmaxes,
+                                                         colors=edgecolor)
 
         return artists
 
