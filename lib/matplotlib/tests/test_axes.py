@@ -2511,7 +2511,8 @@ def test_vert_violinplot_showextrema():
                   showmedians=0)
 
 
-@image_comparison(baseline_images=['violinplot_vert_showmedians'],
+@image_comparison(baseline_images=['violinplot_vert_showmedians',
+                                   'violinplot_vert_showmedians'],
                   extensions=['png'])
 def test_vert_violinplot_showmedians():
     ax = plt.axes()
@@ -2520,6 +2521,11 @@ def test_vert_violinplot_showmedians():
     data = [np.random.normal(size=100) for i in range(4)]
     ax.violinplot(data, positions=range(4), showmeans=0, showextrema=0,
                   showmedians=1)
+
+    fig, ax = plt.subplots()
+    ax = plt.axes()
+    ax.violinplot(data, positions=range(4), showmeans=0, showextrema=0,
+                  showmedians=0, percentiles=[50])
 
 
 @image_comparison(baseline_images=['violinplot_vert_showall'],
@@ -2555,6 +2561,17 @@ def test_vert_violinplot_custompoints_200():
                   showmedians=0, points=200)
 
 
+@image_comparison(baseline_images=['violinplot_vert_custom_percentiles'],
+                  extensions=['png'])
+def test_vert_custom_percentiles():
+    ax = plt.axes()
+    # First 9 digits of frac(sqrt(63))
+    np.random.seed(937253933)
+    data = [np.random.normal(size=100) for i in range(4)]
+    ax.violinplot(data, positions=range(4), showmeans=0, showextrema=0,
+                  showmedians=0, percentiles=[25, 75.656])
+
+
 @image_comparison(baseline_images=['violinplot_horiz_baseline'],
                   extensions=['png'])
 def test_horiz_violinplot_baseline():
@@ -2566,8 +2583,9 @@ def test_horiz_violinplot_baseline():
                   showextrema=0, showmedians=0)
 
 
-@image_comparison(baseline_images=['violinplot_horiz_showmedians'],
-                  extensions=['png'])
+@image_comparison(baseline_images=['violinplot_horiz_showmedians',
+                                   'violinplot_horiz_showmedians'],
+                                   extensions=['png'])
 def test_horiz_violinplot_showmedians():
     ax = plt.axes()
     # First 9 digits of frac(sqrt(23))
@@ -2575,6 +2593,11 @@ def test_horiz_violinplot_showmedians():
     data = [np.random.normal(size=100) for i in range(4)]
     ax.violinplot(data, positions=range(4), vert=False, showmeans=0,
                   showextrema=0, showmedians=1)
+
+    fig, ax = plt.subplots()
+    ax = plt.axes()
+    ax.violinplot(data, positions=range(4), vert=False, showmeans=0,
+                  showextrema=0, showmedians=0, percentiles=[50])
 
 
 @image_comparison(baseline_images=['violinplot_horiz_showmeans'],
@@ -2630,6 +2653,28 @@ def test_horiz_violinplot_custompoints_200():
     data = [np.random.normal(size=100) for i in range(4)]
     ax.violinplot(data, positions=range(4), vert=False, showmeans=0,
                   showextrema=0, showmedians=0, points=200)
+
+
+@image_comparison(baseline_images=['violinplot_horiz_custom_percentiles'],
+                  extensions=['png'])
+def test_horiz_custom_percentiles():
+    ax = plt.axes()
+    # First 9 digits of frac(sqrt(65))
+    np.random.seed(622577482)
+    data = [np.random.normal(size=100) for i in range(4)]
+    ax.violinplot(data, positions=range(4), vert=False, showmeans=0,
+                  showextrema=0, showmedians=0, percentiles=[25, 75.656])
+
+
+def test_violinplot_bad_percentiles():
+    ax = plt.axes()
+    # First 9 digits of frac(sqrt(68))
+    np.random.seed(246211251)
+    data = [np.random.normal(size=100) for i in range(4)]
+    with pytest.raises(ValueError):
+        ax.violinplot(data, positions=range(4), percentiles=[-30])
+    with pytest.raises(ValueError):
+        ax.violinplot(data, positions=range(4), percentiles=["error"])
 
 
 def test_violinplot_bad_positions():

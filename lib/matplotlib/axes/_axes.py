@@ -7483,6 +7483,11 @@ class Axes(_AxesBase):
           callable, it should take a `GaussianKDE` instance as its only
           parameter and return a scalar. If None (default), 'scott' is used.
 
+        percentiles: list of ints or floats
+          If values are provided, sets custom percentile lines, 
+          where each number denotes a percentile to be rendered on
+          the violin plot.
+
         Returns
         -------
 
@@ -7519,6 +7524,11 @@ class Axes(_AxesBase):
               :class:`matplotlib.collections.LineCollection` instance
               created to identify the median values of each of the
               violin's distribution.
+
+            - ``cpercentiles``: A list of the
+              :class:`matplotlib.collections.LineCollection` instance
+              created to identify a specific percentile of each violin's
+              distribution.
 
         Notes
         -----
@@ -7717,9 +7727,8 @@ class Axes(_AxesBase):
                                              colors=edgecolor)
  
         # Render custom percentiles
-        for i in range(0, len(percentileList)):
-            artists['cpercentiles_'+str(i)] = perp_lines(percentileList[i], pmins, pmaxes,
-                                                         colors=edgecolor)
+        artists['cpercentiles'] = list(map(lambda p: perp_lines(p, pmins, pmaxes,
+                                                         colors=edgecolor), percentileList))
 
         return artists
 

@@ -1542,7 +1542,7 @@ def _reshape_2D(X, name):
         raise ValueError("{} must have 2 or fewer dimensions".format(name))
 
 
-def violin_stats(X, method, points=100):
+def violin_stats(X, method, points=100, percentiles=[]):
     """
     Returns a list of dictionaries of data which can be used to draw a series
     of violin plots. See the `Returns` section below to view the required keys
@@ -1566,6 +1566,10 @@ def violin_stats(X, method, points=100):
         Defines the number of points to evaluate each of the gaussian kernel
         density estimates at.
 
+    percentiles : list
+        Defines a list of percentiles in ints or floats, that need to be
+        calculated for the data.
+
     Returns
     -------
 
@@ -1580,6 +1584,8 @@ def violin_stats(X, method, points=100):
         - median: The median value for this column of data.
         - min: The minimum value for this column of data.
         - max: The maximum value for this column of data.
+        - percentiles: The list of percentiles, where each value
+          denotes the a percentile for this column of data.
     """
 
     # List of dictionaries describing each of the violins.
@@ -1606,6 +1612,9 @@ def violin_stats(X, method, points=100):
         stats['median'] = np.median(x)
         stats['min'] = min_val
         stats['max'] = max_val
+
+        # Custom percentile stats
+        stats['percentiles'] = list(map(lambda p: np.percentile(x, p), percentiles))
 
         # Append to output
         vpstats.append(stats)
