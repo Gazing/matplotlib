@@ -29,7 +29,7 @@ fs = 10  # fontsize
 pos = [1, 2, 4, 5, 7, 8]
 data = [np.random.normal(0, std, size=100) for std in pos]
 
-fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(6, 6))
+fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(6, 6))
 
 axes[0, 0].violinplot(data, pos, points=20, widths=0.3,
                       showmeans=True, showextrema=True, showmedians=True)
@@ -57,6 +57,11 @@ axes[1, 2].violinplot(data, pos, points=200, vert=False, widths=1.1,
                       showmeans=True, showextrema=True, showmedians=True,
                       bw_method=0.5)
 axes[1, 2].set_title('Custom violinplot 6', fontsize=fs)
+
+axes[2, 2].violinplot(data, pos, points=200, vert=False, widths=1.1,
+                      showmeans=True, showextrema=True, showmedians=True,
+                      bw_method=0.5, percentiles=[30, 80])
+axes[2, 2].set_title('Custom violinplot 7', fontsize=fs)
 
 for ax in axes.flatten():
     ax.set_yticklabels([])

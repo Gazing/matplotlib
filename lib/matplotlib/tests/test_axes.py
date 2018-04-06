@@ -2585,7 +2585,7 @@ def test_horiz_violinplot_baseline():
 
 @image_comparison(baseline_images=['violinplot_horiz_showmedians',
                                    'violinplot_horiz_showmedians'],
-                                   extensions=['png'])
+                  extensions=['png'])
 def test_horiz_violinplot_showmedians():
     ax = plt.axes()
     # First 9 digits of frac(sqrt(23))
