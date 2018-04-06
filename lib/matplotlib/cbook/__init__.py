@@ -1614,7 +1614,8 @@ def violin_stats(X, method, points=100, percentiles=[]):
         stats['max'] = max_val
 
         # Custom percentile stats
-        stats['percentiles'] = list(map(lambda p: np.percentile(x, p), percentiles))
+        stats['percentiles'] = list(map(lambda p: np.percentile(x, p),
+                                        percentiles))
 
         # Append to output
         vpstats.append(stats)

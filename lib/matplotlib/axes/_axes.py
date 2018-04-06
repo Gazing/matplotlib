@@ -7484,7 +7484,7 @@ class Axes(_AxesBase):
           parameter and return a scalar. If None (default), 'scott' is used.
 
         percentiles: list of ints or floats
-          If values are provided, sets custom percentile lines, 
+          If values are provided, sets custom percentile lines,
           where each number denotes a percentile to be rendered on
           the violin plot.
 
@@ -7543,13 +7543,16 @@ class Axes(_AxesBase):
             kde = mlab.GaussianKDE(X, bw_method)
             return kde.evaluate(coords)
 
-        vpstats = cbook.violin_stats(dataset, _kde_method, points=points, percentiles=percentiles)
+        vpstats = cbook.violin_stats(dataset, _kde_method, points=points,
+                                     percentiles=percentiles)
         return self.violin(vpstats, positions=positions, vert=vert,
                            widths=widths, showmeans=showmeans,
-                           showextrema=showextrema, showmedians=showmedians, percentiles=percentiles)
+                           showextrema=showextrema, showmedians=showmedians,
+                           percentiles=percentiles)
 
     def violin(self, vpstats, positions=None, vert=True, widths=0.5,
-               showmeans=False, showextrema=True, showmedians=False, percentiles=[]):
+               showmeans=False, showextrema=True, showmedians=False,
+               percentiles=[]):
         """Drawing function for violin plots.
 
         Draw a violin plot for each column of `vpstats`. Each filled area
@@ -7599,6 +7602,11 @@ class Axes(_AxesBase):
 
         showmedians : bool, default = False
           If true, will toggle rendering of the medians.
+
+        percentiles: list of ints or floats
+          If values are provided, sets custom percentile lines,
+          where each number denotes a percentile to be rendered on
+          the violin plot.
 
         Returns
         -------
@@ -7704,7 +7712,6 @@ class Axes(_AxesBase):
                 percentileList[i].append(stats['percentiles'][i])
         artists['bodies'] = bodies
 
-
         # Render means
         if showmeans:
             artists['cmeans'] = perp_lines(means, pmins, pmaxes,
@@ -7725,10 +7732,13 @@ class Axes(_AxesBase):
                                              pmins,
                                              pmaxes,
                                              colors=edgecolor)
- 
+
         # Render custom percentiles
-        artists['cpercentiles'] = list(map(lambda p: perp_lines(p, pmins, pmaxes,
-                                                         colors=edgecolor), percentileList))
+        artists['cpercentiles'] = list(map(lambda p:
+                                           perp_lines(p, pmins,
+                                                      pmaxes,
+                                                      colors=edgecolor),
+                                           percentileList))
 
         return artists
 
